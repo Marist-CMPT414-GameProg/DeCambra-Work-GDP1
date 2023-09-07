@@ -45,39 +45,52 @@ int main()
 	bool beeActive = false;
 
 	// How fast can the bee fly?
-	float beeSpeed = 0.0f;
+	float beeSpeed = 25.0f;
 
-	// Make 3 cloud sprits from 1 texture
-	Texture textureCloud;
+	// Make 3 ships sprites
+	Texture textureShip1;
+	Texture textureShip2;
+	Texture textureShip3;
 
-	// Load 1 new texture
-	textureCloud.loadFromFile("graphics/cloud.png");
+	// Load 3 new textures
+	textureShip1.loadFromFile("graphics/ship1.png");
+	textureShip2.loadFromFile("graphics/ship2.png");
+	textureShip3.loadFromFile("graphics/ship3.png");
 
-	// 3 New sprites with the same texture
-	Sprite spriteCloud1;
-	Sprite spriteCloud2;
-	Sprite spriteCloud3;
-	spriteCloud1.setTexture(textureCloud);
-	spriteCloud2.setTexture(textureCloud);
-	spriteCloud3.setTexture(textureCloud);
+	// 3 New sprites
+	Sprite spriteShip1;
+	Sprite spriteShip2;
+	Sprite spriteShip3;
+	spriteShip1.setTexture(textureShip1);
+	spriteShip2.setTexture(textureShip2);
+	spriteShip3.setTexture(textureShip3);
 
-	// Position the clouds on the left of the screen & at different heights
-	spriteCloud1.setPosition(0, 0);
-	spriteCloud2.setPosition(0, 250);
-	spriteCloud3.setPosition(0, 500);
+	// Position the ships on the left of the screen & at different heights
+	spriteShip1.setPosition(0, 0);
+	spriteShip2.setPosition(0, 250);
+	spriteShip3.setPosition(0, 500);
 
-	// Are the clouds currently on screen?
-	bool cloud1Active = false;
-	bool cloud2Active = false;
-	bool cloud3Active = false;
+	// Are the ships currently on screen?
+	bool ship1Active = false;
+	bool ship2Active = false;
+	bool ship3Active = false;
 
-	// How fast is each cloud?
-	float cloud1Speed = 0.0f;
-	float cloud2Speed = 0.0f;
-	float cloud3Speed = 0.0f;
+	// How fast is each ship?
+	float ship1Speed = 100.0f;
+	float ship2Speed = 100.0f;
+	float ship3Speed = 100.0f;
+
+	// Define minimum and maximum scaling factors for the ships
+	const float minScale = 0.25f;
+	const float maxScale = 1.0f;
 
 	// Variables to control time itself
 	Clock clock;
+
+	// Initialize random scales for each ship
+	float ship1Scale = minScale + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (maxScale - minScale)));
+	float ship2Scale = minScale + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (maxScale - minScale)));
+	float ship3Scale = minScale + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (maxScale - minScale)));
 
 	while (window.isOpen())
 	{
@@ -98,7 +111,7 @@ int main()
 		****************************************
 		*/
 
-		// Measue Time
+		// Measure Time
 		Time dt = clock.restart();
 
 		// Set the bee
@@ -127,88 +140,102 @@ int main()
 			}
 		}
 
-		// Manage the clouds
-		// Cloud 1
-		if (!cloud1Active)
+		// Manage the ships
+		// Ship 1
+		if (!ship1Active)
 		{
-			// How fast is the cloud
+			// How fast is the ship
 			srand((int)time(0) * 10);
-			cloud1Speed = (rand() % 200);
+			ship1Speed = (rand() % 200);
 
-			// How high is the cloud
+			// How high is the ship
 			srand((int)time(0) * 10);
 			float height = (rand() % 150);
-			spriteCloud1.setPosition(-200, height);
-			cloud1Active = true;
+			spriteShip1.setPosition(-200, height);
+			ship1Active = true;
+
+			// Generate random scale factor between minScale and maxScale
+			ship1Scale = minScale + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (maxScale - minScale)));
+			
+			// Update ship's scale
+			spriteShip1.setScale(ship1Scale, ship1Scale);
 		}
 		else
 		{
 
-			spriteCloud1.setPosition(spriteCloud1.getPosition().x + (cloud1Speed * dt.asSeconds()), spriteCloud1.getPosition().y);
+			spriteShip1.setPosition(spriteShip1.getPosition().x + (ship1Speed * dt.asSeconds()), spriteShip1.getPosition().y);
 
-			// Has the cloud reached the right hand edge of the screen?
-			if (spriteCloud1.getPosition().x > 1920)
+			// Has the ship reached the right hand edge of the screen?
+			if (spriteShip1.getPosition().x > 1920)
 			{
-				// Set it up ready to be a whole new cloud next frame
-				cloud1Active = false;
+				// Set it up ready to be a whole new ship next frame
+				ship1Active = false;
 			}
 		}
 		
-		// Cloud 2
-		if (!cloud2Active)
+		// ship 2
+		if (!ship2Active)
 		{
 
-			// How fast is the cloud
+			// How fast is the ship
 			srand((int)time(0) * 20);
-			cloud2Speed = (rand() % 200);
+			ship2Speed = (rand() % 200);
 
-			// How high is the cloud
+			// How high is the ship
 			srand((int)time(0) * 20);
 			float height = (rand() % 300) - 150;
-			spriteCloud2.setPosition(-200, height);
-			cloud2Active = true;
+			spriteShip2.setPosition(-200, height);
+			ship2Active = true;
 
-
+			// Generate random scale factor between minScale and maxScale
+			ship2Scale = minScale + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (maxScale - minScale)));
+			
+			// Update ship's scale
+			spriteShip2.setScale(ship1Scale, ship1Scale);
 		}
 		else
 		{
 
-			spriteCloud2.setPosition(spriteCloud2.getPosition().x + (cloud2Speed * dt.asSeconds()), spriteCloud2.getPosition().y);
+			spriteShip2.setPosition(spriteShip2.getPosition().x + (ship2Speed * dt.asSeconds()), spriteShip2.getPosition().y);
 
-			// Has the cloud reached the right hand edge of the screen?
-			if (spriteCloud2.getPosition().x > 1920)
+			// Has the ship reached the right hand edge of the screen?
+			if (spriteShip2.getPosition().x > 1920)
 			{
-				// Set it up ready to be a whole new cloud next frame
-				cloud2Active = false;
+				// Set it up ready to be a whole new ship next frame
+				ship2Active = false;
 			}
 		}
 
-		// Cloud 3
-		if (!cloud3Active)
+		// ship 3
+		if (!ship3Active)
 		{
 
-			// How fast is the cloud
+			// How fast is the ship
 			srand((int)time(0) * 30);
-			cloud3Speed = (rand() % 200);
+			ship3Speed = (rand() % 200);
 
-			// How high is the cloud
+			// How high is the ship
 			srand((int)time(0) * 30);
 			float height = (rand() % 450) - 150;
-			spriteCloud3.setPosition(-200, height);
-			cloud3Active = true;
+			spriteShip3.setPosition(-200, height);
+			ship3Active = true;
 
+			// Generate random scale factor between minScale and maxScale
+			ship3Scale = minScale + static_cast<float>(rand()) / (static_cast<float>(RAND_MAX / (maxScale - minScale)));
 
+			// Update ship's scale
+			spriteShip3.setScale(ship1Scale, ship1Scale);
 		}
 		else
 		{
 
-			spriteCloud3.setPosition(spriteCloud3.getPosition().x + (cloud3Speed * dt.asSeconds()), spriteCloud3.getPosition().y);
+			spriteShip3.setPosition(spriteShip3.getPosition().x + (ship3Speed * dt.asSeconds()), spriteShip3.getPosition().y);
 
-			// Has the cloud reached the right hand edge of the screen?
-			if (spriteCloud3.getPosition().x > 1920)
+			// Has the ship reached the right hand edge of the screen?
+			if (spriteShip3.getPosition().x > 1920)
 			{
-				// Set it up ready to be a whole new cloud next frame
-				cloud3Active = false;
+				// Set it up ready to be a whole new ship next frame
+				ship3Active = false;
 			}
 		}
 
@@ -224,10 +251,10 @@ int main()
 		// Draw our game scene here
 		window.draw(spriteBackground);
 
-		// Draw the clouds
-		window.draw(spriteCloud1);
-		window.draw(spriteCloud2);
-		window.draw(spriteCloud3);
+		// Draw the ships
+		window.draw(spriteShip1);
+		window.draw(spriteShip2);
+		window.draw(spriteShip3);
 
 		// Draw the tree
 		window.draw(spriteTree);
