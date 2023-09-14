@@ -5,6 +5,17 @@
 // Make code easier to type with "using namespace"
 using namespace sf;
 
+// Function declaration
+void updateBranches(int seed);
+
+const int NUM_BRANCHES = 6;
+Sprite branches[NUM_BRANCHES];
+
+// Where is player/branhc?
+// Left or right
+enum class side {LEFT, RIGHT, NONE};
+side branchPositions[NUM_BRANCHES];
+
 int main()
 {
 	// Create a video mode object
@@ -145,6 +156,27 @@ int main()
 	messageText.setPosition(1920 / 2.0f, 1080 / 2.0f);
 
 	scoreText.setPosition(20, 20);
+
+	// Prepare 5 branches
+	Texture textureBranch;
+	textureBranch.loadFromFile("graphics/branch.png");
+
+	// Set the texture for each branch sprite
+	for (int i = 0; i < NUM_BRANCHES; i++)
+	{
+		branches[i].setTexture(textureBranch);
+		branches[i].setPosition(-2000, -2000);
+
+		// Set the sprite's origin to dead center
+		// We can then spin it round without changing its position
+		branches[i].setOrigin(220, 20);
+	}
+
+	updateBranches(1);
+	updateBranches(2);
+	updateBranches(3);
+	updateBranches(4);
+	updateBranches(5);
 
 	while (window.isOpen())
 	{
@@ -340,6 +372,32 @@ int main()
 			ss << "Score: " << score;
 			scoreText.setString(ss.str());
 
+			// Update the branch sprites
+			for (int i = 0; i < NUM_BRANCHES; i++)
+			{
+				float height = i * 150;
+				
+				if (branchPositions[i] == side::LEFT)
+				{
+					// Move the sprite to the left side
+					branches[i].setPosition(600, height);
+					// Flip the sprite around the other way
+					branches[i].setRotation(180);
+				}
+				else if (branchPositions[i] == side::RIGHT)
+				{
+					// Move the sprite to the right side
+					branches[i].setPosition(1330, height);
+					// Flip the sprite rotation to normal
+					branches[i].setRotation(0);
+				}
+				else
+				{
+					// Hide the branch
+					branches[i].setPosition(3000, height);
+				}
+			}
+
 		}// End if(!pause)
 
 		/*
@@ -358,6 +416,12 @@ int main()
 		window.draw(spriteShip1);
 		window.draw(spriteShip2);
 		window.draw(spriteShip3);
+
+		// Draw the branches
+		for (int i = 0; i < NUM_BRANCHES; i++)
+		{
+			window.draw(branches[i]);
+		}
 
 		// Draw the tree
 		window.draw(spriteTree);
@@ -381,4 +445,33 @@ int main()
 		window.display();
 	}
 	return 0;
+}
+
+// Function definition
+void updateBranches(int seed)
+{
+	// Move all the branches down one place
+	for (int j = NUM_BRANCHES - 1; j > 0; j--)
+	{
+		branchPositions[j] = branchPositions[j - 1];
+	}
+
+	// Spawn a new branch at position 0
+	// LEFT, RIGHT, or NONE
+	srand((int)time(0) + seed);
+	int r = (rand() % 5);
+
+	switch (r)
+	{
+		case 0:
+			branchPositions[0] = side::LEFT;
+				break;
+
+		case 1:
+			branchPositions[0] = side::RIGHT;
+
+		default:
+			branchPositions[0] = side::NONE;
+			break;
+	}
 }
