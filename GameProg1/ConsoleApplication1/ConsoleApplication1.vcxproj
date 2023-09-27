@@ -21,10 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a21060e5-0aa0-4f13-99f5-0ebbfe81bedc}</ProjectGuid>
-    <RootNamespace>Timber</RootNamespace>
+    <ProjectGuid>{690374a9-db12-4886-b67d-66e3bd808c26}</ProjectGuid>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Timber Clone</ProjectName>
+    <ProjectName>Pong Clone</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -133,7 +133,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Timber_DeCambra.cpp" />
+    <ClCompile Include="Bat.cpp" />
+    <ClCompile Include="Pong_DeCambra.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bat.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
