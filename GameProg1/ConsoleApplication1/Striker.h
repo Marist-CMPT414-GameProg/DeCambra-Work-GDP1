@@ -40,13 +40,18 @@ public:
 
 	void setShapeOrigin()
 	{
-		m_Shape.setOrigin(93, 93);
+		m_Shape.setOrigin(60, 60);
 	}
 
 	void setTexture(sf::Texture const& texture)
 	{
 		m_Sprite.setTexture(texture);
 	}
+
+	void setYPositionTop();
+	void setYPositionBottom();
+
+	void setXPosition();
 
 	void moveLeft();
 	void moveRight();
@@ -57,6 +62,8 @@ public:
 	void moveDown();
 	void stopUp();
 	void stopDown();
+
+	void Goal(float newY, float newX);
 
 	void update(Time dt);
 };

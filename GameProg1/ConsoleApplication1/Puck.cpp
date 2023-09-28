@@ -43,10 +43,32 @@ float Puck::getXPosition()
 
 void Puck::setVelocity(float x, float y)
 {
-	m_DirectionX = x;
-	m_DirectionY = y;
 	m_InitialVelocity = sf::Vector2f(x, y);
+	m_DirectionX = x;
+	m_DirectionY = y;	
 }
+
+void Puck::setYPositionTop(Striker& striker)
+{
+	m_Position.y = 97.6;
+
+	striker.setYPositionTop();
+}
+
+void Puck::setYPositionBottom(Striker& striker)
+{
+	m_Position.y = 982.4;
+
+	striker.setYPositionBottom();
+}
+
+void Puck::setXPositionRight(Striker& striker)
+{
+	m_Position.x = 1827.4;
+
+	striker.setXPosition();
+}
+
 
 void Puck::reboundSides()
 {
@@ -66,14 +88,14 @@ void Puck::reboundStriker(Striker& striker)
 
 void Puck::Goal()
 {
-	m_Position.y = 960;
-	m_Position.x = 540;
+	m_Position.x = 960;
+	m_Position.y = 540;
 }
 
 void Puck::update(Time dt)
 {
 	// Introduce drag to slow down the puck
-	const float dragFactor = 0.99999f;
+	const float dragFactor = 0.9999f;
 	m_DirectionX *= dragFactor;
 	m_DirectionY *= dragFactor;
 

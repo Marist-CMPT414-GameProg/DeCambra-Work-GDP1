@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
 
-
 int main()
 {
 	// Low res code
@@ -41,8 +40,8 @@ int main()
 
 	// Create a striker at the start position
 	Striker striker(960 + 600, 540);
-	striker.setTexture(textureStriker);
 	striker.setShapeOrigin();
+	striker.setTexture(textureStriker);	
 
 	// Create a puck texture
 	Texture texturePuck;
@@ -52,6 +51,7 @@ int main()
 	Puck puck(960, 540);
 	puck.setTexture(texturePuck);
 	puck.setShapeOrigin();
+	puck.setVelocity(0, 0);
 
 	// Create a Text object called HUD
 	Text hud;
@@ -179,11 +179,40 @@ int main()
 		// Handle puck being scored
 		else if (puckXPosition < 0 || puckXPosition > 1920)
 		{
+			// striker.Goal();
 			score++;
 
-			// Reset puck
+			// Reset players & puck
+			striker.Goal(540, 1460);
+
+			puck.setVelocity(0, 0);
 			puck.Goal();
 		}
+
+		// Handle puck getting stuck in top and bottom edges of map
+		if (puckYPosition < 96)
+		{
+			puck.setYPositionTop(striker);
+		}
+		else if (puckYPosition > 984)
+		{
+			puck.setYPositionBottom(striker);
+		}
+
+		// Handle puck getting stuck in left and right edges of map
+		if (puckYPosition > 673.4 || puckYPosition < 297.4)
+		{
+			if (puckXPosition > 1828)
+			{
+				puck.setXPositionRight(striker);
+			}
+		}
+
+		// Handle puck getting pushed outside of arena
+		/*if (puckYPosition < 54.6 + 43)
+		{
+			puckYPosition = 54.6 + 43;
+		}*/
 
 		// Has the puck hit the striker?
 		if (puck.getPosition().intersects(striker.getPosition()))

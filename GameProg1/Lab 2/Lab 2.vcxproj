@@ -24,6 +24,7 @@
     <ProjectGuid>{6a4ed62b-b946-491c-bf01-3a012338cf0b}</ProjectGuid>
     <RootNamespace>Lab2</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Lab 3</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -130,7 +131,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bee.cpp" />
     <ClCompile Include="spiralingoutofcontrol.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Bee.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

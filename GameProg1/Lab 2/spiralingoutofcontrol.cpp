@@ -1,3 +1,4 @@
+#include "Bee.h"
 #include <SFML/Graphics.hpp>
 #include <cmath>
 
@@ -44,28 +45,21 @@ int main()
     spriteFlower.setTexture(textureFlower);
     spriteFlower.setPosition(250, 250);
 
-    // Set up the bee
+    // Create bee texture
     Texture textureBee;
     textureBee.loadFromFile("graphics/bee.png");
-    Sprite spriteBee;
-    spriteBee.setTexture(textureBee);
+
+    // Set up the bee
+    Bee bee(200, 200);
+    bee.setTexture(textureBee);
 
     // Initialize the direction as clockwise
     Direction beeDirection = Direction::Clockwise;
 
-    // Is the bee currently moving?
-    bool beeActive = true;
-
-    // How fast can the bee fly?
-    float beeSpeed = 1.25f;
-
-    // Bee animation variables
-    float angle = 0.0f; 
-
     // Set the initial position of the bee based on the initial angle
-    float initialX = 400 + cos(angle) * 250; 
-    float initialY = 400 + sin(angle) * 250; 
-    spriteBee.setPosition(initialX, initialY);
+    float initialX = 400 + cos(bee.getAngle()) * 250;
+    float initialY = 400 + sin(bee.getAngle()) * 250;
+    bee.setPosition(initialX, initialY);
 
     while (window.isOpen())
     {
@@ -95,36 +89,32 @@ int main()
             }
         }
 
-        // Update bee position for circular motion
-        if (beeActive)
+        // Calculate new position based on the direction
+        if (beeDirection == Direction::Clockwise)
         {
-            // Calculate new position based on the direction
-            if (beeDirection == Direction::Clockwise)
-            {
-                angle += 0.005f * beeSpeed;
-            }
-            else
-            {
-                angle -= 0.005f * beeSpeed;
-            }
+            bee.setAngle(bee.getAngle() + 0.005f * bee.getSpeed());
+        }
+        else
+        {
+            bee.setAngle(bee.getAngle() - 0.005f * bee.getSpeed());
+        }
 
-            // Calculate new position in a circle
-            float x = 400 + cos(angle) * 250;
-            float y = 400 + sin(angle) * 250;
+        // Calculate new position in a circle
+        float x = 400 + cos(bee.getAngle()) * 250;
+        float y = 400 + sin(bee.getAngle()) * 250;
 
-            spriteBee.setPosition(x, y);
+        bee.setPosition(x, y);
 
-            if (angle >= 2 * 3.14159265f)
-            {
-                angle = 0.0f;
-            }
+        if (bee.getAngle() >= 2 * 3.14159265f)
+        {
+             bee.setAngle(0);
         }
 
         // Clear and draw
         window.clear();
         window.draw(spriteBackground);
         window.draw(spriteFlower);
-        window.draw(spriteBee);
+        window.draw(bee.getSprite());
         window.display();
     }
 

@@ -34,6 +34,11 @@ public:
 
 	void setVelocity(float x, float y);
 
+	void setTexture(sf::Texture const& texture)
+	{
+		m_Sprite.setTexture(texture);
+	}
+
 	void setSpritePosition(float newX, float newY)
 	{
 		m_Sprite.setPosition(newX, newY);
@@ -44,10 +49,11 @@ public:
 		m_Shape.setOrigin(54.5, 54.5);
 	}
 
-	void setTexture(sf::Texture const& texture)
-	{
-		m_Sprite.setTexture(texture);
-	}
+	void setYPositionTop(Striker& striker);
+
+	void setYPositionBottom(Striker& striker);
+
+	void setXPositionRight(Striker& striker);
 
 	void reboundSides();
 

@@ -6,7 +6,7 @@ Striker::Striker(float startX, float startY)
 	m_Position.x = startX;
 	m_Position.y = startY;
 
-	m_Shape.setRadius(93);
+	m_Shape.setRadius(60);
 	m_Shape.setPosition(m_Position);
 }
 
@@ -33,6 +33,20 @@ float Striker::getXVelocity() const
 float Striker::getYVelocity() const
 {
 	return m_MovingDown - m_MovingUp;
+}
+void Striker::setYPositionTop()
+{
+	m_Position.y = 283.6;
+}
+
+void Striker::setYPositionBottom()
+{
+	m_Position.y = 796.4;
+}
+
+void Striker::setXPosition()
+{
+	m_Position.x = 1679.8;
 }
 
 void Striker::moveLeft()
@@ -75,6 +89,12 @@ void Striker::stopDown()
 	m_MovingDown = false;
 }
 
+void Striker::Goal(float newY, float newX)
+{
+	m_Position.x = newX;
+	m_Position.y = newY;
+}
+
 void Striker::update(Time dt)
 {
 	if (m_MovingLeft && m_Position.x > 960 + 93) 
@@ -97,7 +117,7 @@ void Striker::update(Time dt)
 		m_Position.y += m_Speed * dt.asSeconds();
 	}
 
-	// m_Sprite.setPosition(m_positon);
+	m_Sprite.setOrigin(33, 33);
 	m_Shape.setPosition(m_Position);
 
 	//debug color delete when done make transparenet when done
