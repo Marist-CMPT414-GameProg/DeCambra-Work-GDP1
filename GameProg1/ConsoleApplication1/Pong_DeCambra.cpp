@@ -1,4 +1,5 @@
-#include "Bat.h"
+#include "Striker.h"
+#include "Puck.h"
 #include <sstream>
 #include <cstdlib>
 #include <SFML/Graphics.hpp>
@@ -6,19 +7,51 @@
 
 int main()
 {
-	// Create a video mode object
-	VideoMode vm(1920, 1080);
+	// Low res code
+	VideoMode vm(960, 540);
 
-	// Create and open a window for the game
-	RenderWindow window(vm, "Pong", Style::Fullscreen);
+	// Low res code
+	RenderWindow window(vm, "AirHockey");
+	View view(sf::FloatRect(0, 0, 1920, 1080));
+	window.setView(view);
+	//End of low res code!! Everything else is the same!!
 
 	int score = 0;
 	int lives = 3;
 
-	// Create a bat
-	Bat bat(1920 / 2, 1080 - 20);
+	// Create a texture to hold a graphic on the GPU
+	Texture textureBackground;
 
-	// We will add a ball in the next chapter
+	// Load a graphic into the texture
+	textureBackground.loadFromFile("graphics/background.png");
+
+	// Create a sprite
+	Sprite spriteBackground;
+
+	// Attach the texture to the sprite
+	spriteBackground.setTexture(textureBackground);
+
+	// Set the spriteBackground to cover the screen
+	spriteBackground.setScale(view.getSize().x / spriteBackground.getLocalBounds().width, view.getSize().y / spriteBackground.getLocalBounds().height);
+	spriteBackground.setPosition(0, 0);
+
+	// Create a striker texture
+	Texture textureStriker;
+	textureStriker.loadFromFile("graphics/striker_red.png");
+
+	// Create a striker at the start position
+	Striker striker(960 + 600, 540);
+	striker.setTexture(textureStriker);
+	striker.setShapeOrigin();
+
+	// Create a puck texture
+	Texture texturePuck;
+	texturePuck.loadFromFile("graphics/puck.png");
+
+	// Create a puck
+	Puck puck(960, 540);
+	puck.setTexture(texturePuck);
+	puck.setShapeOrigin();
 
 	// Create a Text object called HUD
 	Text hud;
@@ -68,24 +101,42 @@ int main()
 		// Handle the pressing and releasing of the arrow keys
 		if (Keyboard::isKeyPressed(Keyboard::Left))
 		{
-			bat.moveLeft();
+			striker.moveLeft();
 		}
 		else
 		{
-			bat.stopLeft();
+			striker.stopLeft();
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Right))
 		{
-			bat.moveRight();
+			striker.moveRight();
 		}
 		else
 		{
-			bat.stopRight();
+			striker.stopRight();
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::Up))
+		{
+			striker.moveUp();
+		}
+		else
+		{
+			striker.stopUp();
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::Down))
+		{
+			striker.moveDown();
+		}
+		else
+		{
+			striker.stopDown();
 		}
 
 		/*
-		Update the bat, the ball and the HUD
+		Update the striker, the puck and the HUD
 		*********************************************************************
 		*********************************************************************
 		*********************************************************************
@@ -93,23 +144,72 @@ int main()
 
 		// Update the delta time
 		Time dt = clock.restart();
-		bat.update(dt);
+		striker.update(dt);
+		puck.update(dt);
 
 		// Update the HUD text
 		std::stringstream ss;
 		ss << "Score:" << score << "    Lives:" << lives;
 		hud.setString(ss.str());
 
+		// Set the position of the sprite to match the position of the striker
+		striker.setSpritePosition(striker.getPosition().left, striker.getPosition().top);
+
+		// Set the position of the sprite to match the position of the puck
+		puck.setSpritePosition(puck.getPosition().left, puck.getPosition().top);
+
+		// Get puck's x and y values
+		float puckYPosition = puck.getYPosition();
+		float puckXPosition = puck.getXPosition();
+
+		// Handle the puck hitting the bottom or top
+		if (puckYPosition <= 54.6 + 43 || puckYPosition >= 1025.4 - 43)
+		{
+			puck.reboundBottomOrTop();
+		}
+
+		// Handle puck hitting the sides
+		if (puckYPosition > 673.4 || puckYPosition < 297.4)
+		{
+			if (puckXPosition <= 54.6 + 38 || puckXPosition >= 1865.4 - 38)
+			{
+				puck.reboundSides();
+			}
+		}
+		// Handle puck being scored
+		else if (puckXPosition < 0 || puckXPosition > 1920)
+		{
+			score++;
+
+			// Reset puck
+			puck.Goal();
+		}
+
+		// Has the puck hit the striker?
+		if (puck.getPosition().intersects(striker.getPosition()))
+		{
+			// Hit detected so reserve the puck and score a point
+			puck.reboundStriker(striker);
+		}		
+
 		/*
-		Draw the bat, the ball and the HUD
+		Draw the striker, the puck and the HUD
 		*********************************************************************
 		*********************************************************************
 		*********************************************************************
 		*/
 
 		window.clear();
+
+		window.draw(spriteBackground);
 		window.draw(hud);
-		window.draw(bat.getShape());
+
+		window.draw(striker.getShape());
+		window.draw(striker.getSprite());
+
+		window.draw(puck.getShape());
+		window.draw(puck.getSprite());
+
 		window.display();
 	}
 	return 0;

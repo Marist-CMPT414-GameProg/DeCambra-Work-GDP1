@@ -18,12 +18,18 @@
     <ClCompile Include="Pong_DeCambra.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Bat.cpp">
+    <ClCompile Include="Striker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Puck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bat.h">
+    <ClInclude Include="Striker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Puck.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
