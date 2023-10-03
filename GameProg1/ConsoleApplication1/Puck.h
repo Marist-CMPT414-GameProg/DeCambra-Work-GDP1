@@ -14,23 +14,27 @@ private:
 
 	sf::Vector2f m_InitialVelocity;
 
-	float m_Speed = 1000;
+	float m_Speed = 55;
 	float m_DirectionX = .2f;
 	float m_DirectionY = .2f;
+
+	bool m_Colliding = false;
+
+	float m_LastDistance;
 
 public:
 	Puck(float startX, float startY);
 
 	FloatRect getPosition();
-
 	CircleShape getShape();
-
 	Sprite getSprite();
 
 	float getXVelocity();
-
 	float getYPosition();
 	float getXPosition();
+
+	void isColliding();
+	void notColliding();
 
 	void setVelocity(float x, float y);
 
@@ -49,20 +53,15 @@ public:
 		m_Shape.setOrigin(54.5, 54.5);
 	}
 
-	void setYPositionTop(Striker& striker);
-
-	void setYPositionBottom(Striker& striker);
-
-	void setXPositionRight(Striker& striker);
+	void setYPositionTop();
+	void setYPositionBottom();
+	void setXPositionRight();
+	void setXPositionLeft();
 
 	void reboundSides();
-
 	void reboundBottomOrTop();
-
 	void reboundStriker(Striker& striker);
 
 	void Goal();
-
 	void update(Time dt);
-
 };

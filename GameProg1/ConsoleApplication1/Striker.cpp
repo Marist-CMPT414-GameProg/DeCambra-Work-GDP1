@@ -6,7 +6,7 @@ Striker::Striker(float startX, float startY)
 	m_Position.x = startX;
 	m_Position.y = startY;
 
-	m_Shape.setRadius(60);
+	m_Shape.setRadius(93);
 	m_Shape.setPosition(m_Position);
 }
 
@@ -25,6 +25,11 @@ Sprite Striker::getSprite()
 	return m_Sprite;
 }
 
+float Striker::getRadius()
+{
+	return m_Shape.getRadius();
+}
+
 float Striker::getXVelocity() const
 {
 	return m_MovingRight - m_MovingLeft;
@@ -34,29 +39,38 @@ float Striker::getYVelocity() const
 {
 	return m_MovingDown - m_MovingUp;
 }
-void Striker::setYPositionTop()
+
+float Striker::getYPosition()
 {
-	m_Position.y = 283.6;
+	return m_Position.y;
 }
 
-void Striker::setYPositionBottom()
+float Striker::getXPosition()
 {
-	m_Position.y = 796.4;
+	return m_Position.x;
 }
 
-void Striker::setXPosition()
+void Striker::setXPosition(float newX)
 {
-	m_Position.x = 1679.8;
+	m_Position.x = newX;
 }
 
-void Striker::moveLeft()
+void Striker::moveLeft(Time dt, float i)
 {
 	m_MovingLeft = true;
+	if (m_MovingLeft && m_Position.x > i)
+	{
+		m_Position.x -= m_Speed * dt.asSeconds();
+	}
 }
 
-void Striker::moveRight()
+void Striker::moveRight(Time dt, float i)
 {
 	m_MovingRight = true;
+	if (m_MovingRight && m_Position.x < i)
+	{
+		m_Position.x += m_Speed * dt.asSeconds();
+	}
 }
 
 void Striker::stopLeft()
@@ -69,14 +83,22 @@ void Striker::stopRight()
 	m_MovingRight = false;
 }
 
-void Striker::moveUp()
+void Striker::moveUp(Time dt, float i)
 {
 	m_MovingUp = true;
+	if (m_MovingUp && m_Position.y > i)
+	{
+		m_Position.y -= m_Speed * dt.asSeconds();
+	}
 }
 
-void Striker::moveDown()
+void Striker::moveDown(Time dt, float i)
 {
 	m_MovingDown = true;
+	if (m_MovingDown && m_Position.y < i)
+	{
+		m_Position.y += m_Speed * dt.asSeconds();
+	}
 }
 
 void Striker::stopUp()
@@ -97,31 +119,8 @@ void Striker::Goal(float newY, float newX)
 
 void Striker::update(Time dt)
 {
-	if (m_MovingLeft && m_Position.x > 960 + 93) 
-	{
-		m_Position.x -= m_Speed * dt.asSeconds();
-	}
-
-	if (m_MovingRight && m_Position.x < 1827 - 38) 
-	{
-		m_Position.x += m_Speed * dt.asSeconds();
-	}
-
-	if (m_MovingUp && m_Position.y > 93 + 43)
-	{
-		m_Position.y -= m_Speed * dt.asSeconds();
-	}
-
-	if (m_MovingDown && m_Position.y < 987 - 43)
-	{
-		m_Position.y += m_Speed * dt.asSeconds();
-	}
-
-	m_Sprite.setOrigin(33, 33);
 	m_Shape.setPosition(m_Position);
-
-	//debug color delete when done make transparenet when done
-	m_Shape.setFillColor(sf::Color::Green);
+	m_Shape.setFillColor(sf::Color::Transparent);
 }
 
 //93 to outer striker

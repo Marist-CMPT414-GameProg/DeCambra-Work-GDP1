@@ -8,7 +8,6 @@ class Striker
 private:
 	Vector2f m_Position;
 
-	// A CircleShape object
 	CircleShape m_Shape;
 
 	sf::Sprite m_Sprite;
@@ -25,13 +24,15 @@ public:
 	Striker(float startX, float startY);
 
 	FloatRect getPosition();
-
 	CircleShape getShape();
-
 	Sprite getSprite();
+
+	float getRadius();
 
 	float getXVelocity() const;
 	float getYVelocity() const;
+	float getYPosition();
+	float getXPosition();
 
 	void setSpritePosition(float newX, float newY)
 	{
@@ -40,7 +41,7 @@ public:
 
 	void setShapeOrigin()
 	{
-		m_Shape.setOrigin(60, 60);
+		m_Shape.setOrigin(93, 93);
 	}
 
 	void setTexture(sf::Texture const& texture)
@@ -48,22 +49,18 @@ public:
 		m_Sprite.setTexture(texture);
 	}
 
-	void setYPositionTop();
-	void setYPositionBottom();
+	void setXPosition(float newX);
 
-	void setXPosition();
-
-	void moveLeft();
-	void moveRight();
+	void moveLeft(Time dt, float i);
+	void moveRight(Time dt, float i);
 	void stopLeft();
 	void stopRight();
 
-	void moveUp();
-	void moveDown();
+	void moveUp(Time dt, float i);
+	void moveDown(Time dt, float i);
 	void stopUp();
 	void stopDown();
 
 	void Goal(float newY, float newX);
-
 	void update(Time dt);
 };
