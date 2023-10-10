@@ -7,9 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab1", "Lab1\Lab1.vcxproj",
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Timber Clone", "Timber\Timber.vcxproj", "{A21060E5-0AA0-4F13-99F5-0EBBFE81BEDC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab 2", "Lab 2\Lab 2.vcxproj", "{6A4ED62B-B946-491C-BF01-3A012338CF0B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lab 3", "Lab 2\Lab 2.vcxproj", "{6A4ED62B-B946-491C-BF01-3A012338CF0B}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pong Clone", "ConsoleApplication1\ConsoleApplication1.vcxproj", "{690374A9-DB12-4886-B67D-66E3BD808C26}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Zombie Arena Clone", "Zombie Arena Clone\Zombie Arena Clone.vcxproj", "{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,14 @@ Global
 		{690374A9-DB12-4886-B67D-66E3BD808C26}.Release|x64.Build.0 = Release|x64
 		{690374A9-DB12-4886-B67D-66E3BD808C26}.Release|x86.ActiveCfg = Release|Win32
 		{690374A9-DB12-4886-B67D-66E3BD808C26}.Release|x86.Build.0 = Release|Win32
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Debug|x64.ActiveCfg = Debug|x64
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Debug|x64.Build.0 = Debug|x64
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Debug|x86.ActiveCfg = Debug|Win32
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Debug|x86.Build.0 = Debug|Win32
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Release|x64.ActiveCfg = Release|x64
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Release|x64.Build.0 = Release|x64
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Release|x86.ActiveCfg = Release|Win32
+		{3180297A-5ED5-4F6F-9EC1-57ECA1DB79D3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
