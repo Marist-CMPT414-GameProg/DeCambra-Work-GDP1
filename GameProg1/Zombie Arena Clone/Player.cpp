@@ -1,4 +1,5 @@
 #include "player.h"
+#include "TextureHolder.h"
 
 Player::Player()
 {
@@ -8,8 +9,7 @@ Player::Player()
 
 	// Associate a texture with the sprite
 	// !!Watch this space!!
-	m_Texture.loadFromFile("graphics/player.png");
-	m_Sprite.setTexture(m_Texture);
+	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/player.png"));
 
 	// Set the origin of the sprite to the center, for smooth rotation
 	m_Sprite.setOrigin(25, 25);
@@ -169,9 +169,7 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 	}
 
 	// Calculate the angle the player is facing
-	float angle = (atan2(mousePosition.y - m_Resolution.y / 2,
-		mousePosition.x - m_Resolution.x / 2)
-		* 180) / 3.141;
+	float angle = (atan2(mousePosition.y - m_Resolution.y / 2, mousePosition.x - m_Resolution.x / 2) * 180) / 3.141;
 
 	m_Sprite.setRotation(angle);
 }
