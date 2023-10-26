@@ -7,6 +7,7 @@
 #include "TextureHolder.h"
 #include "Bullet.h"
 #include "Pickup.h"
+#include "Crate.h"
 
 using namespace sf;
 
@@ -52,6 +53,10 @@ int main()
 	// Load the texture for our background vertex array
 	Texture textureBackground;
 	textureBackground.loadFromFile("graphics/background_sheet.png");
+
+	// Load the crate texture
+	Texture textureCrate;
+	textureCrate.loadFromFile("graphics/crate.png");
 
 	// Prepare for a horde of zombies
 	int numZombies;
@@ -444,6 +449,9 @@ int main()
 				// to the createBackground function
 				int tileSize = createBackground(background, arena);
 
+				// Generate crates
+				std::vector<Crate> crates = createCrates(10, arena, textureCrate); // Adjust the number as needed
+
 				// Spawn the player in the middle of the arena
 				player.spawn(arena, resolution, tileSize);
 
@@ -656,6 +664,13 @@ int main()
 
 			// Draw the background
 			window.draw(background, &textureBackground);
+
+			// Draw the crates
+			for (const Crate& crate : crates)
+			{
+				window.draw(crate.getSprite());
+			}
+
 
 			// Draw the zombies
 			for (int i = 0; i < numZombies; i++)
