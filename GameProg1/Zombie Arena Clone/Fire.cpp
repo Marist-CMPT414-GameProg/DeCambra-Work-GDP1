@@ -1,14 +1,16 @@
-#include "Crate.h"
+#include "Fire.h"
 #include "TextureHolder.h"
 
-
-Crate::Crate()
+Fire::Fire()
 {
-    m_Sprite = Sprite(TextureHolder::GetTexture("graphics/crate.png"));
-    m_Sprite.setOrigin(25, 25);
+	m_Sprite = Sprite(TextureHolder::GetTexture("graphics/fire.png"));
+
+	m_Damage = FIRE_START_VALUE;
+
+	m_Sprite.setOrigin(25, 25);
 }
 
-void Crate::setArena(IntRect arena)
+void Fire::setArena(IntRect arena)
 {
     // Copy the details of the arena to the pickup's m_Arena
     m_Arena.left = arena.left + 100;
@@ -19,7 +21,7 @@ void Crate::setArena(IntRect arena)
     spawn();
 }
 
-void Crate::spawn()
+void Fire::spawn()
 {
     // Spawn at a random location
     int x = (rand() % m_Arena.width);
@@ -30,17 +32,22 @@ void Crate::spawn()
     m_Sprite.setPosition(x, y);
 }
 
-FloatRect Crate::getPosition()
+FloatRect Fire::getPosition()
 {
     return m_Sprite.getGlobalBounds();
 }
 
-Sprite Crate::getSprite()
+Sprite Fire::getSprite()
 {
     return m_Sprite;
 }
 
-bool Crate::isSpawned()
+bool Fire::isSpawned()
 {
     return m_Spawned;
+}
+
+int Fire::burnDamage()
+{
+    return m_Damage;
 }

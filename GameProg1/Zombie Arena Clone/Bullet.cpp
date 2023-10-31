@@ -2,7 +2,10 @@
 
 Bullet::Bullet()
 {
-	m_BulletShape.setSize(sf::Vector2f(2, 2));
+	m_BulletShape.setSize(sf::Vector2f(4, 4));
+	m_BulletShape2.setSize(sf::Vector2f(4, 4));
+	m_BulletShape.setFillColor(sf::Color::Green);
+	m_BulletShape2.setFillColor(sf::Color::Green);
 }
 
 void Bullet::shoot(float startX, float startY, float targetX, float targetY)
@@ -11,6 +14,9 @@ void Bullet::shoot(float startX, float startY, float targetX, float targetY)
 	m_InFlight = true;
 	m_Position.x = startX;
 	m_Position.y = startY;
+
+	m_Position2.x = startX;
+	m_Position2.y = startY;
 
 	// Calculate the gradient of the flight path
 	float gradient = (startX - targetX) / (startY - targetY);

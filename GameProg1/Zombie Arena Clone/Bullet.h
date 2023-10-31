@@ -8,9 +8,11 @@ class Bullet
 private:
 	// Where is the bullet?
 	Vector2f m_Position;
+	Vector2f m_Position2;
 
 	// What each bullet looks like
 	RectangleShape m_BulletShape;
+	RectangleShape m_BulletShape2;
 
 	// Is this bullet currently whizzing through the air
 	bool m_InFlight = false;
@@ -23,9 +25,12 @@ private:
 	float m_BulletDistanceX;
 	float m_BulletDistanceY;
 
+	float m_BulletDistanceX2;
+	float m_BulletDistanceY2;
+
 	// Where is this bullet headed to?
-	float m_XTarget;
-	float m_YTarget;
+	//float m_XTarget;
+	//float m_YTarget;
 
 	// Some boundaries so the bullet doesn't fly forever
 	float m_MaxX;

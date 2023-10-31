@@ -8,6 +8,7 @@
 #include "Bullet.h"
 #include "Pickup.h"
 #include "Crate.h"
+#include "Fire.h"
 
 using namespace sf;
 
@@ -42,8 +43,15 @@ int main()
 	// Where is the mouse in relation to screen coordinates
 	Vector2i mouseScreenPosition;
 
+	// Create the crates
+	std::vector<Crate> crates;
+
+	// Create the fire
+	std::vector<Fire> fires;
+	int numfiresToSpawn = 0;
+
 	// Create an instance of the Player class
-	Player player;
+	Player player(crates, fires);
 
 	// The boundaries of the arena
 	IntRect arena;
@@ -51,12 +59,7 @@ int main()
 	// Create the background
 	VertexArray background;
 	// Load the texture for our background vertex array
-	Texture textureBackground;
-	textureBackground.loadFromFile("graphics/background_sheet.png");
-
-	// Load the crate texture
-	Texture textureCrate;
-	textureCrate.loadFromFile("graphics/crate.png");
+	Texture textureBackground = TextureHolder::GetTexture("graphics/background_sheet.png");
 
 	// Prepare for a horde of zombies
 	int numZombies;
@@ -84,6 +87,10 @@ int main()
 	// Create a couple of pickups
 	Pickup healthPickup(1);
 	Pickup ammoPickup(2);
+	Pickup multishotPickup(3);
+
+	bool isMultishot = false;
+	float multishotTimeRemaining = 0;
 
 	// About the game
 	int score = 0;
@@ -112,7 +119,7 @@ int main()
 	Text pausedText;
 	pausedText.setFont(font);
 	pausedText.setCharacterSize(155);
-	pausedText.setFillColor(Color::White);
+	pausedText.setFillColor(Color::Green);
 	pausedText.setPosition(400, 400);
 	pausedText.setString("Press Enter \nto continue");
 
@@ -120,7 +127,7 @@ int main()
 	Text gameOverText;
 	gameOverText.setFont(font);
 	gameOverText.setCharacterSize(125);
-	gameOverText.setFillColor(Color::White);
+	gameOverText.setFillColor(Color::Green);
 	gameOverText.setPosition(250, 850);
 	gameOverText.setString("Press Enter to play");
 
@@ -128,30 +135,32 @@ int main()
 	Text levelUpText;
 	levelUpText.setFont(font);
 	levelUpText.setCharacterSize(80);
-	levelUpText.setFillColor(Color::White);
+	levelUpText.setFillColor(Color::Green);
 	levelUpText.setPosition(150, 250);
 	std::stringstream levelUpStream;
 	levelUpStream <<
-		"1- Increased rate of fire" <<
-		"\n2- Increased clip size(next reload)" <<
-		"\n3- Increased max health" <<
-		"\n4- Increased run speed" <<
-		"\n5- More and better health pickups" <<
-		"\n6- More and better ammo pickups";
+		"1- INCREASED RATE OF FIRE" <<
+		"\n2- INCREASED CLIP SIZE (NEXT RELOAD)" <<
+		"\n3- INCREASED MAX HEALTH" <<
+		"\n4- INCREASED RUN SPEED" <<
+		"\n5- MORE & BETTER HELTH PICKUPS" <<
+		"\n6- MORE & BETTER AMMO PICKUPS" <<
+		"\n7- MORE & BETTER MULTISHOT PICKUPS" <<
+		"\n8- INCREASED INVINCIBILITY AFTER TAKING DAMAGE";
 	levelUpText.setString(levelUpStream.str());
 
 	// Ammo
 	Text ammoText;
 	ammoText.setFont(font);
 	ammoText.setCharacterSize(55);
-	ammoText.setFillColor(Color::White);
+	ammoText.setFillColor(Color::Green);
 	ammoText.setPosition(200, 980);
 
 	// Score
 	Text scoreText;
 	scoreText.setFont(font);
 	scoreText.setCharacterSize(55);
-	scoreText.setFillColor(Color::White);
+	scoreText.setFillColor(Color::Green);
 	scoreText.setPosition(20, 0);
 
 	// Load the high score from a text file/
@@ -166,7 +175,7 @@ int main()
 	Text hiScoreText;
 	hiScoreText.setFont(font);
 	hiScoreText.setCharacterSize(55);
-	hiScoreText.setFillColor(Color::White);
+	hiScoreText.setFillColor(Color::Green);
 	hiScoreText.setPosition(1400, 0);
 	std::stringstream s;
 	s << "Hi Score:" << hiScore;
@@ -176,7 +185,7 @@ int main()
 	Text zombiesRemainingText;
 	zombiesRemainingText.setFont(font);
 	zombiesRemainingText.setCharacterSize(55);
-	zombiesRemainingText.setFillColor(Color::White);
+	zombiesRemainingText.setFillColor(Color::Green);
 	zombiesRemainingText.setPosition(1500, 980);
 	zombiesRemainingText.setString("Zombies: 100");
 
@@ -185,7 +194,7 @@ int main()
 	Text waveNumberText;
 	waveNumberText.setFont(font);
 	waveNumberText.setCharacterSize(55);
-	waveNumberText.setFillColor(Color::White);
+	waveNumberText.setFillColor(Color::Green);
 	waveNumberText.setPosition(1250, 980);
 	waveNumberText.setString("Wave: 0");
 
@@ -196,6 +205,9 @@ int main()
 
 	// When did we last update the HUD?
 	int framesSinceLastHUDUpdate = 0;
+
+	// When did we last update?
+	Time timeSinceLastUpdate;
 
 	// How often (in frames) should we update the HUD
 	int fpsMeasurementFrameInterval = 1000;
@@ -241,6 +253,12 @@ int main()
 	pickupBuffer.loadFromFile("audio/pickup.wav");
 	Sound pickup;
 	pickup.setBuffer(pickupBuffer);
+
+	// Prepare the burn sound
+	SoundBuffer burnBuffer;
+	burnBuffer.loadFromFile("audio/burn.wav");
+	Sound burn;
+	burn.setBuffer(burnBuffer);
 
 	// The main game loop
 	while (window.isOpen())
@@ -314,7 +332,6 @@ int main()
 						}
 					}
 				}
-
 			}
 		}// End event polling
 
@@ -374,6 +391,15 @@ int main()
 					bullets[currentBullet].shoot(player.getCenter().x, player.getCenter().y, mouseWorldPosition.x, mouseWorldPosition.y);
 
 					currentBullet++;
+
+					// Check is multishot pickup was picked up
+					if (isMultishot)
+					{
+						bullets[currentBullet].shoot(player.getCenter().x, player.getCenter().y, -mouseWorldPosition.x, -mouseWorldPosition.y);
+
+						bullets[currentBullet].shoot(player.getCenter().x, player.getCenter().y, mouseWorldPosition.x + 45, mouseWorldPosition.y + 45);
+					}
+
 					if (currentBullet > 99)
 					{
 						currentBullet = 0;
@@ -434,6 +460,20 @@ int main()
 				state = State::PLAYING;
 			}
 
+			if (event.key.code == Keyboard::Num7)
+			{
+				// Upgrade multishot puckup
+				multishotPickup.newUpgrade();
+				state = State::PLAYING;
+			}
+
+			if (event.key.code == Keyboard::Num8)
+			{
+				// Increase invincibility
+				player.increaseHitTime();
+				state = State::PLAYING;
+			}
+
 			if (state == State::PLAYING)
 			{
 				// Increase the wave number
@@ -449,8 +489,25 @@ int main()
 				// to the createBackground function
 				int tileSize = createBackground(background, arena);
 
-				// Generate crates
-				std::vector<Crate> crates = createCrates(10, arena, textureCrate); // Adjust the number as needed
+				// Create crates at the start of each wave
+				crates.clear();
+				int numCratesToSpawn = 2 * wave;
+				for (int i = 0; i < numCratesToSpawn; i++)
+				{
+					Crate crate;
+					crate.setArena(arena);
+					crates.push_back(crate);
+				}
+
+				// Create fires at the start of each wave
+				fires.clear();
+				int numfiresToSpawn = 2 * wave;
+				for (int i = 0; i < numfiresToSpawn; i++)
+				{
+					Fire fire;
+					fire.setArena(arena);
+					fires.push_back(fire);
+				}
 
 				// Spawn the player in the middle of the arena
 				player.spawn(arena, resolution, tileSize);
@@ -458,6 +515,7 @@ int main()
 				// Configure the pick-ups
 				healthPickup.setArena(arena);
 				ammoPickup.setArena(arena);
+				multishotPickup.setArena(arena);
 
 				// Create a horde of zombies
 				numZombies = 5 * wave;
@@ -499,7 +557,17 @@ int main()
 			spriteCrosshair.setPosition(mouseWorldPosition);
 
 			// Update the player
-			player.update(dtAsSeconds, Mouse::getPosition());
+			player.update(dtAsSeconds, Mouse::getPosition(), gameTimeTotal, burn);
+
+			if (player.getHealth() <= 0)
+			{
+				state = State::GAME_OVER;
+
+				std::ofstream outputFile("gamedata/scores.txt");
+				outputFile << hiScore;
+				outputFile.close();
+			}
+
 
 			// Make a note of the players new position
 			Vector2f playerPosition(player.getCenter());
@@ -512,7 +580,7 @@ int main()
 			{
 				if (zombies[i].isAlive())
 				{
-					zombies[i].update(dt.asSeconds(), playerPosition);
+					zombies[i].update(dt.asSeconds(), playerPosition, crates, fires, gameTimeTotal, burn);
 				}
 			}
 
@@ -528,6 +596,7 @@ int main()
 			// Update the pickups
 			healthPickup.update(dtAsSeconds);
 			ammoPickup.update(dtAsSeconds);
+			multishotPickup.update(dtAsSeconds);
 
 			// Collision detection
 			// Have any zombies been shot?
@@ -587,7 +656,7 @@ int main()
 						outputFile.close();
 					}
 				}
-			}// End player touched
+			}// End player touched			
 
 			// Has the player touched health pickup
 			if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
@@ -607,15 +676,36 @@ int main()
 				reload.play();
 			}
 
+			// Has the player touched the multishot pickup
+			if (player.getPosition().intersects(multishotPickup.getPosition()) && multishotPickup.isSpawned())
+			{
+				isMultishot = true;
+				multishotTimeRemaining = multishotPickup.gotIt();
+				// Play a sound
+				pickup.play();
+			}
+
+			if (isMultishot)
+			{
+				multishotTimeRemaining -= dtAsSeconds;
+
+				// Check if the multishot effect has expired
+				if (multishotTimeRemaining <= 0)
+				{
+					isMultishot = false;
+				}
+			}
+
 			// size up the health bar
 			healthBar.setSize(Vector2f(player.getHealth() * 3, 70));
 
+			// Increment the time since last HUD udpate
+			timeSinceLastUpdate += dt;
 			// Increment the number of frames since the last HUD calculation
 			framesSinceLastHUDUpdate++;
 			// Calculate FPS every fpsMeasurementFrameInterval frames
 			if (framesSinceLastHUDUpdate > fpsMeasurementFrameInterval)
 			{
-
 				// Update game HUD text
 				std::stringstream ssAmmo;
 				std::stringstream ssScore;
@@ -644,6 +734,7 @@ int main()
 				zombiesRemainingText.setString(ssZombiesAlive.str());
 
 				framesSinceLastHUDUpdate = 0;
+				timeSinceLastUpdate = Time::Zero;
 			}// End HUD update
 
 		}// End updating the scene
@@ -666,11 +757,22 @@ int main()
 			window.draw(background, &textureBackground);
 
 			// Draw the crates
-			for (const Crate& crate : crates)
+			for (Crate& crate : crates)
 			{
-				window.draw(crate.getSprite());
+				if (crate.isSpawned())
+				{
+					window.draw(crate.getSprite());
+				}
 			}
 
+			// Draw the fires
+			for (Fire& fire : fires)
+			{
+				if (fire.isSpawned())
+				{
+					window.draw(fire.getSprite());
+				}
+			}
 
 			// Draw the zombies
 			for (int i = 0; i < numZombies; i++)
@@ -697,6 +799,10 @@ int main()
 			if (healthPickup.isSpawned())
 			{
 				window.draw(healthPickup.getSprite());
+			}
+			if (multishotPickup.isSpawned())
+			{
+				window.draw(multishotPickup.getSprite());
 			}
 
 			//Draw the crosshair

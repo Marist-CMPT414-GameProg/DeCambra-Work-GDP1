@@ -14,6 +14,13 @@ Pickup::Pickup(int type)
 		// How much is pickup worth
 		m_Value = HEALTH_START_VALUE;
 	}
+	else if (m_Type == 3)
+	{
+		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/doubleshot_pickup.png"));
+
+		// How much is pickup worth
+		m_Value = MULTISHOT_START_VALUE;
+	}
 	else
 	{
 		m_Sprite = Sprite(TextureHolder::GetTexture("graphics/ammo_pickup.png"));
@@ -31,10 +38,10 @@ Pickup::Pickup(int type)
 void Pickup::setArena(IntRect arena)
 {
 	// Copy the details of the arena to the pickup's m_Arena
-	m_Arena.left = arena.left + 50;
-	m_Arena.width = arena.width - 50;
-	m_Arena.top = arena.top + 50;
-	m_Arena.height = arena.height - 50;
+	m_Arena.left = arena.left + 100;
+	m_Arena.width = arena.width - 100;
+	m_Arena.top = arena.top + 100;
+	m_Arena.height = arena.height - 100;
 
 	spawn();
 }
@@ -48,7 +55,6 @@ void Pickup::spawn()
 	int y = (rand() % m_Arena.height);
 
 	// Not currently spawned
-	// m_Spawned = false;
 	m_SecondsSinceSpawn = 0;
 	m_Spawned = true;
 
@@ -116,6 +122,15 @@ void Pickup::upgrade()
 	}
 
 	// Make them more frequent and last longer
-	m_SecondsToLive += (START_SECONDS_TO_LIVE / 10);
-	m_SecondsToWait -= (START_WAIT_TIME / 10);
+	m_SecondsToLive += (START_SECONDS_TO_LIVE / 30);
+	m_SecondsToWait -= (START_WAIT_TIME / 3);
+}
+
+void Pickup::newUpgrade()
+{
+	m_Value += (MULTISHOT_START_VALUE * .5);
+
+	// Make them more frequent and last longer
+	m_SecondsToLive += (START_SECONDS_TO_LIVE / 30);
+	m_SecondsToWait -= (START_WAIT_TIME / 3);
 }

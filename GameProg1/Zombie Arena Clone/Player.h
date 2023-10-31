@@ -1,5 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
+#include "Crate.h"
+#include "Fire.h"
 
 using namespace sf;
 
@@ -8,6 +11,7 @@ class Player
 private:
 	const float START_SPEED = 200;
 	const float START_HEALTH = 100;
+	const float m_InvincibilityTime = 200;
 
 	// Where is the player
 	Vector2f m_Position;
@@ -36,8 +40,11 @@ private:
 
 	// How much health has the player got?
 	int m_Health;
+
 	// What is the maximum health the player can have?
 	int m_MaxHealth;
+
+	int m_Time;
 
 	// When was the player last hit
 	Time m_LastHit;
@@ -45,9 +52,12 @@ private:
 	// Speed in pixels per second
 	float m_Speed;
 
+	std::vector<Crate>& crates;
+	std::vector<Fire>& fires;
+
 public:
 
-	Player();
+	Player(std::vector<Crate>& crates, std::vector<Fire>& fires);
 
 	// Call this at the end of every game
 	void resetPlayerStats();
@@ -56,6 +66,8 @@ public:
 
 	// Handle the player getting hit by a zombie
 	bool hit(Time timeHit);
+
+	bool burn(Time timehit, Sound& burnSound);
 
 	// How long ago was the player last hit
 	Time getLastHitTime();
@@ -94,7 +106,7 @@ public:
 	void stopDown();
 
 	// We will call this function once every frame
-	void update(float elapsedTime, Vector2i mousePosition);
+	void update(float elapsedTime, Vector2i mousePosition, Time timeHit, Sound& burnSound);
 
 	// Give player a speed boost
 	void upgradeSpeed();
@@ -104,4 +116,6 @@ public:
 
 	// Increase the maximum amount of health the player can have
 	void increaseHealthLevel(int amount);
+
+	void increaseHitTime();
 };

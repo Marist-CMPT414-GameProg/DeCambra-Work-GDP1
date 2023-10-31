@@ -1,11 +1,12 @@
 #include "player.h"
 #include "TextureHolder.h"
 
-Player::Player()
+Player::Player(std::vector<Crate>& crates, std::vector<Fire>& fires) : crates(crates), fires(fires)
 {
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
+	m_Time = m_InvincibilityTime;
 
 	// Associate a texture with the sprite
 	// !!Watch this space!!
@@ -20,6 +21,7 @@ void Player::resetPlayerStats()
 	m_Speed = START_SPEED;
 	m_Health = START_HEALTH;
 	m_MaxHealth = START_HEALTH;
+	m_Time = m_InvincibilityTime;
 }
 
 void Player::spawn(IntRect arena, Vector2f resolution, int tileSize)
@@ -49,7 +51,7 @@ Time Player::getLastHitTime()
 
 bool Player::hit(Time timeHit)
 {
-	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 200)// 2 tenths of second
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > m_Time)// 2 tenths of second
 	{
 		m_LastHit = timeHit;
 		m_Health -= 10;
@@ -59,7 +61,21 @@ bool Player::hit(Time timeHit)
 	{
 		return false;
 	}
+}
 
+bool Player::burn(Time timeHit, Sound& burnSound)
+{
+	if (timeHit.asMilliseconds() - m_LastHit.asMilliseconds() > 2 * m_Time)
+	{
+		m_LastHit = timeHit;
+		m_Health -= 10;
+		burnSound.play();
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 FloatRect Player::getPosition()
@@ -127,8 +143,9 @@ void Player::stopDown()
 	m_DownPressed = false;
 }
 
-void Player::update(float elapsedTime, Vector2i mousePosition)
+void Player::update(float elapsedTime, Vector2i mousePosition, Time timeHit, Sound& burnSound)
 {
+	Vector2f previousPosition = m_Position;
 
 	if (m_UpPressed)
 	{
@@ -152,7 +169,34 @@ void Player::update(float elapsedTime, Vector2i mousePosition)
 
 	m_Sprite.setPosition(m_Position);
 
+	// Iterate through the vector of crates
+	for (Crate& crate : crates)
+	{
+		// Check for collisions with the crate
+		if (m_Position.x < crate.getPosition().left + crate.getPosition().width &&
+			m_Position.x + m_Sprite.getGlobalBounds().width > crate.getPosition().left &&
+			m_Position.y < crate.getPosition().top + crate.getPosition().height &&
+			m_Position.y + m_Sprite.getGlobalBounds().height > crate.getPosition().top)
+		{
+			// Handle the collision here, for example, prevent the player from moving into the crate
+			m_Position = previousPosition;
+		}
+	}
 
+	// Iterate through the vector of fires
+	for (Fire& fire : fires) 
+	{
+		if (m_Position.x < fire.getPosition().left + fire.getPosition().width &&
+			m_Position.x + m_Sprite.getGlobalBounds().width > fire.getPosition().left &&
+			m_Position.y < fire.getPosition().top + fire.getPosition().height &&
+			m_Position.y + m_Sprite.getGlobalBounds().height > fire.getPosition().top) 
+		{
+			if (burn(timeHit, burnSound))
+			{
+				burn(timeHit, burnSound);
+			}
+		}
+	}
 
 	// Keep the player in the arena
 	if (m_Position.x > m_Arena.width - m_TileSize)
@@ -191,7 +235,6 @@ void Player::upgradeHealth()
 {
 	// 20% max health upgrade
 	m_MaxHealth += (START_HEALTH * .2);
-
 }
 
 void Player::increaseHealthLevel(int amount)
@@ -203,4 +246,9 @@ void Player::increaseHealthLevel(int amount)
 	{
 		m_Health = m_MaxHealth;
 	}
+}
+
+void Player::increaseHitTime()
+{
+	m_Time += 100;
 }
