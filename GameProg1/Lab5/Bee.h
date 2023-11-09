@@ -19,6 +19,7 @@ private:
 	float speed = 300.0f;
 	sf::Vector2f velocity;
 	sf::Vector2f prevPosition;
+	int dirCode;
 
 	void moveLeft();
 	void moveRight();
