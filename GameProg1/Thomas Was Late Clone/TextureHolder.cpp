@@ -24,7 +24,6 @@ sf::Texture& TextureHolder::GetTexture(std::string const& filename)
 	auto keyValuePair = m.find(filename);
 	// auto is equivalent of map<string, Texture>::iterator
 
-
 	// Did we find a match?
 	if (keyValuePair != m.end())
 	{

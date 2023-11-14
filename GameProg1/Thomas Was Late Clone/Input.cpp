@@ -7,8 +7,6 @@ void Engine::input()
 	{
 		if (event.type == Event::KeyPressed)
 		{
-
-
 			// Handle the player quitting
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
@@ -33,5 +31,17 @@ void Engine::input()
 				m_SplitScreen = !m_SplitScreen;
 			}
 		}
+	}
+
+	// Handle input specific to Thomas
+	if (m_Thomas.handleInput())
+	{
+		// Play a jump sound
+	}
+
+	// Handle input specific to Bob
+	if (m_Bob.handleInput())
+	{
+		// Play a jump sound
 	}
 }

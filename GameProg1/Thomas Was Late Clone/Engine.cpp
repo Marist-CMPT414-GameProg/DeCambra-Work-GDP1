@@ -1,6 +1,5 @@
 #include "Engine.h"
 
-
 Engine::Engine()
 {
 	// Get the screen resolution and create an SFML window and View
@@ -34,7 +33,6 @@ Engine::Engine()
 
 	// Associate the sprite with the texture
 	m_BackgroundSprite.setTexture(m_BackgroundTexture);
-
 }
 
 void Engine::run()

@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "TextureHolder.h"
+#include "Thomas.h"
+#include "Bob.h"
 
 using namespace sf;
 
@@ -9,6 +11,10 @@ class Engine
 private:
 	// The texture holder
 	TextureHolder th;
+
+	// Thomas and his friend, Bob
+	Thomas m_Thomas;
+	Bob m_Bob;
 
 	const int TILE_SIZE = 50;
 	const int VERTS_IN_QUAD = 4;
@@ -45,7 +51,7 @@ private:
 	bool m_SplitScreen = false;
 
 	// How much time is left in the current level
-	float m_TimeRemaining;
+	float m_TimeRemaining = 10;
 	Time m_GameTimeTotal;
 
 	// Is it time for a new/first level?
