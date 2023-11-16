@@ -26,6 +26,7 @@ protected:
 	// Has the player just initialted a jump
 	bool m_JustJumped = false;
 
+	// Private variables and functions come next
 private:
 	// What is the gravity
 	float m_Gravity;
@@ -45,6 +46,7 @@ private:
 	// And a texture
 	Texture m_Texture;
 
+	// All our public functions will come next
 public:
 	void spawn(Vector2f startPosition, float gravity);
 

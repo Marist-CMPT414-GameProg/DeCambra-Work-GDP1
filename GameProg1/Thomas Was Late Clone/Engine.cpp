@@ -11,6 +11,10 @@ Engine::Engine()
 
 	// Initialize the full screen view
 	m_MainView.setSize(resolution);
+
+	// Two lines below used to create zoomed our screenshots for the book
+	//m_BGMainView.zoom(2.5);
+	//m_MainView.zoom(2.5);
 	m_HudView.reset(FloatRect(0, 0, resolution.x, resolution.y));
 
 	// Inititialize the split-screen Views
@@ -33,6 +37,9 @@ Engine::Engine()
 
 	// Associate the sprite with the texture
 	m_BackgroundSprite.setTexture(m_BackgroundTexture);
+
+	// Load the texture for the background vertex array
+	m_TextureTiles = TextureHolder::GetTexture("graphics/tiles_sheet.png");
 }
 
 void Engine::run()

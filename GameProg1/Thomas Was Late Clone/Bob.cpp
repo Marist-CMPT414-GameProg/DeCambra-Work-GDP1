@@ -15,6 +15,7 @@ bool Bob::handleInput()
 
 	if (Keyboard::isKeyPressed(Keyboard::Up))
 	{
+
 		// Start a jump if not already jumping
 		// but only if standing on a block (not falling)
 		if (!m_IsJumping && !m_IsFalling)
@@ -28,10 +29,12 @@ bool Bob::handleInput()
 	{
 		m_IsJumping = false;
 		m_IsFalling = true;
+
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Left))
 	{
 		m_LeftPressed = true;
+
 	}
 	else
 	{
