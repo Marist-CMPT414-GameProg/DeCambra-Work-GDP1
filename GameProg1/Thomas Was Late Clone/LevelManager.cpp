@@ -83,8 +83,8 @@ int** LevelManager::nextLevel(VertexArray& rVaLevel)
 	int y = 0;
 	while (inputFile >> row)
 	{
-		for (int x = 0; x < row.length(); x++)
-		{
+		for (int x = 0; x < row.length(); x++) {
+
 			const char val = row[x];
 			arrayLevel[y][x] = atoi(&val);
 		}
@@ -125,7 +125,7 @@ int** LevelManager::nextLevel(VertexArray& rVaLevel)
 
 			rVaLevel[currentVertex + 2].texCoords =	Vector2f(TILE_SIZE, TILE_SIZE + verticalOffset);
 
-			rVaLevel[currentVertex + 3].texCoords =	Vector2f(0, TILE_SIZE + verticalOffset);
+			rVaLevel[currentVertex + 3].texCoords = Vector2f(0, TILE_SIZE + verticalOffset);
 
 			// Position ready for the next four vertices
 			currentVertex = currentVertex + VERTS_IN_QUAD;

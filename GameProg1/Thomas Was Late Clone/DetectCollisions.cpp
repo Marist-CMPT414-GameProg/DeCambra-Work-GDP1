@@ -24,14 +24,8 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 	// Or higher than the end of the array
 	if (startX < 0)startX = 0;
 	if (startY < 0)startY = 0;
-	if (endX >= m_LM.getLevelSize().x)
-	{
-		endX = m_LM.getLevelSize().x;
-	}
-	if (endY >= m_LM.getLevelSize().y)
-	{
-		endY = m_LM.getLevelSize().y;
-	}		
+	if (endX >= m_LM.getLevelSize().x) endX = m_LM.getLevelSize().x;
+	if (endY >= m_LM.getLevelSize().y) endY = m_LM.getLevelSize().y;
 
 	// Has the character fallen out of the map?
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!This can be part of level manager!!!!!!!!!!!!!!!!!!!!!!!!
@@ -61,10 +55,13 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 					if (m_ArrayLevel[y][x] == 2)// Fire, ouch!
 					{
 						// Play a sound
+						m_SM.playFallInFire();
+
 					}
 					else // Water
 					{
 						// Play a sound
+						m_SM.playFallInWater();
 					}
 				}
 			}
@@ -92,6 +89,7 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 			}
 
 			// More collision detection here once we have learned about particle effects
+
 			// Has the character reached the goal?
 			if (m_ArrayLevel[y][x] == 4)
 			{

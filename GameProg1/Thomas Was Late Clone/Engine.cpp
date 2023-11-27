@@ -11,10 +11,6 @@ Engine::Engine()
 
 	// Initialize the full screen view
 	m_MainView.setSize(resolution);
-
-	// Two lines below used to create zoomed our screenshots for the book
-	//m_BGMainView.zoom(2.5);
-	//m_MainView.zoom(2.5);
 	m_HudView.reset(FloatRect(0, 0, resolution.x, resolution.y));
 
 	// Inititialize the split-screen Views
