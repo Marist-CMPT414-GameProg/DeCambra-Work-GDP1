@@ -20,6 +20,7 @@ void Engine::update(float dtAsSeconds)
 
 		// Load a level
 		loadLevel();
+
 	}
 
 	if (m_Playing)
@@ -40,6 +41,7 @@ void Engine::update(float dtAsSeconds)
 
 			// Play the reach goal sound
 			m_SM.playReachGoal();
+
 		}
 		else
 		{
@@ -131,4 +133,10 @@ void Engine::update(float dtAsSeconds)
 
 		m_FramesSinceLastHUDUpdate = 0;
 	}
-}
+
+	// Update the particles
+	if (m_PS.running())
+	{
+		m_PS.update(dtAsSeconds);
+	}
+}// End of update function

@@ -6,6 +6,7 @@
 #include "LevelManager.h"
 #include "SoundManager.h"
 #include "HUD.h"
+#include "ParticleSystem.h"
 
 using namespace sf;
 
@@ -14,6 +15,9 @@ class Engine
 private:
 	// The texture holder
 	TextureHolder th;
+
+	// create a particle system
+	ParticleSystem m_PS;
 
 	// Thomas and his friend, Bob
 	Thomas m_Thomas;
@@ -54,6 +58,8 @@ private:
 	// Declare a sprite and a Texture for the background
 	Sprite m_BackgroundSprite;
 	Texture m_BackgroundTexture;
+	// Declare a shader for the background
+	Shader m_RippleShader;
 
 	// Is the game currently playing?
 	bool m_Playing = false;
@@ -93,7 +99,8 @@ private:
 	bool detectCollisions(PlayableCharacter& character);
 
 	// Make a vector of the best places to emit sounds from
-	void populateEmitters(vector <Vector2f>& vSoundEmitters, int** arrayLevel);
+	void populateEmitters(vector <Vector2f>& vSoundEmitters,
+		int** arrayLevel);
 
 	// A vector of Vector2f for the fire emiiter locations
 	vector <Vector2f> m_FireEmitters;
@@ -104,4 +111,5 @@ public:
 
 	// Run will call all the private functions
 	void run();
+
 };

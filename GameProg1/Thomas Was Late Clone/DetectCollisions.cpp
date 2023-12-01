@@ -22,13 +22,24 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 
 	// Make sure we don't test positions lower than zero
 	// Or higher than the end of the array
-	if (startX < 0)startX = 0;
-	if (startY < 0)startY = 0;
-	if (endX >= m_LM.getLevelSize().x) endX = m_LM.getLevelSize().x;
-	if (endY >= m_LM.getLevelSize().y) endY = m_LM.getLevelSize().y;
+	if (startX < 0)
+	{
+		startX = 0;
+	}
+	if (startY < 0)
+	{
+		startY = 0;
+	}
+	if (endX >= m_LM.getLevelSize().x)
+	{
+		endX = m_LM.getLevelSize().x;
+	}
+	if (endY >= m_LM.getLevelSize().y)
+	{
+		endY = m_LM.getLevelSize().y;
+	}
 
 	// Has the character fallen out of the map?
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!This can be part of level manager!!!!!!!!!!!!!!!!!!!!!!!!
 	FloatRect level(0, 0, m_LM.getLevelSize().x * TILE_SIZE, m_LM.getLevelSize().y * TILE_SIZE);
 	if (!character.getPosition().intersects(level))
 	{
@@ -56,7 +67,6 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 					{
 						// Play a sound
 						m_SM.playFallInFire();
-
 					}
 					else // Water
 					{
@@ -78,6 +88,7 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 					character.stopLeft(block.left);
 				}
 
+
 				if (character.getFeet().intersects(block))
 				{
 					character.stopFalling(block.top);
@@ -89,6 +100,21 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 			}
 
 			// More collision detection here once we have learned about particle effects
+			// Has the characters' feet touched fire or water?
+			// If so, start a particle effect
+			// Make sure this is the first time we have detected this
+			// by seeing if an effect is already running			
+			if (!m_PS.running())
+			{
+				if (m_ArrayLevel[y][x] == 2 || m_ArrayLevel[y][x] == 3)
+				{
+					if (character.getFeet().intersects(block))
+					{
+						// position and start the particle system
+						m_PS.emitParticles(character.getCenter());
+					}
+				}
+			}
 
 			// Has the character reached the goal?
 			if (m_ArrayLevel[y][x] == 4)
@@ -98,7 +124,6 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 			}
 		}
 	}
-
 	// All done, return, wheteher or not a new level might be required
 	return reachedGoal;
 }

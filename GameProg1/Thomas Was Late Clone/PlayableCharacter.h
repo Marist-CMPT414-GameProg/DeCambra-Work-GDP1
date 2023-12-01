@@ -48,6 +48,7 @@ private:
 
 	// All our public functions will come next
 public:
+
 	void spawn(Vector2f startPosition, float gravity);
 
 	// This is a pure virtual function

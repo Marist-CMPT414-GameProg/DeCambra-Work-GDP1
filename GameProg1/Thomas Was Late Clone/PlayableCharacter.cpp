@@ -15,6 +15,7 @@ void PlayableCharacter::spawn(Vector2f startPosition, float gravity)
 
 void PlayableCharacter::update(float elapsedTime)
 {
+
 	if (m_RightPressed)
 	{
 		m_Position.x += m_Speed * elapsedTime;
