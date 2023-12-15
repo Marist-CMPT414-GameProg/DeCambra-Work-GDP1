@@ -1,6 +1,8 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include "Observer.h"
 using namespace sf;
 using namespace std;
 
@@ -15,7 +17,12 @@ private:
 	int m_CurrentLevel = 0;
 	const int NUM_LEVELS = 4;
 
+	std::vector<Observer*> observers;
+
 public:
+	void addObserver(Observer* observer);
+
+	void notifyObservers();
 
 	const int TILE_SIZE = 50;
 	const int VERTS_IN_QUAD = 4;

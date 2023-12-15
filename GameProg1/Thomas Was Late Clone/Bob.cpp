@@ -29,26 +29,30 @@ bool Bob::handleInput()
 	{
 		m_IsJumping = false;
 		m_IsFalling = true;
+	}
+	
 
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Left))
+	///////////////why dont it work
+	if (!isOnIce())
 	{
-		m_LeftPressed = true;
+		if (Keyboard::isKeyPressed(Keyboard::Left))
+		{
+			m_LeftPressed = true;
+		}
+		else
+		{
+			m_LeftPressed = false;
+		}
 
-	}
-	else
-	{
-		m_LeftPressed = false;
-	}
-
-	if (Keyboard::isKeyPressed(Keyboard::Right))
-	{
-		m_RightPressed = true;;
-	}
-	else
-	{
-		m_RightPressed = false;
-	}
+		if (Keyboard::isKeyPressed(Keyboard::Right))
+		{
+			m_RightPressed = true;;
+		}
+		else
+		{
+			m_RightPressed = false;
+		}
+	}		
 
 	return m_JustJumped;
 }

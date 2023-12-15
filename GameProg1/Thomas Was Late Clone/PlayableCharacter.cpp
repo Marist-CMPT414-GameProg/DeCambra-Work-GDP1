@@ -9,21 +9,30 @@ void PlayableCharacter::spawn(Vector2f startPosition, float gravity)
 	// Initialize the gravity
 	m_Gravity = gravity;
 
+	// Initialize the last known x-velocity
+	m_LastDirection = 0.0f;
+
 	// Move the sprite in to position
 	m_Sprite.setPosition(m_Position);
+
+	m_ElapsedTime = 0.0f;
 }
 
 void PlayableCharacter::update(float elapsedTime)
 {
+	m_ElapsedTime = elapsedTime;
+
 
 	if (m_RightPressed)
 	{
 		m_Position.x += m_Speed * elapsedTime;
+		m_LastDirection = 1.0f;
 	}
 
 	if (m_LeftPressed)
 	{
 		m_Position.x -= m_Speed * elapsedTime;
+		m_LastDirection = -1.0f;
 	}
 
 	// Handle Jumping
@@ -80,6 +89,32 @@ void PlayableCharacter::update(float elapsedTime)
 
 	// Move the sprite into position
 	m_Sprite.setPosition(m_Position);
+}
+
+// Set whether the character is on ice or not
+void PlayableCharacter::setOnIce(bool onIce)
+{
+	m_IsOnIce = onIce;
+}
+
+// Check if the character is on ice
+bool PlayableCharacter::isOnIce() const
+{
+	return m_IsOnIce;
+}
+
+// Slipping on ice
+void PlayableCharacter::handleIceBlock(bool isTouchingIceBlock)
+{
+	if (isTouchingIceBlock && isOnIce())
+	{
+		// Stop horizontal movement
+		m_LeftPressed = false;
+		m_RightPressed = false;
+
+		// Apply the last known x-velocity
+		m_Position.x += ((m_Speed* 2) * m_LastDirection) * m_ElapsedTime;
+	}
 }
 
 FloatRect PlayableCharacter::getPosition()

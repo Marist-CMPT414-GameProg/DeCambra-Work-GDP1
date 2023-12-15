@@ -30,22 +30,27 @@ bool Thomas::handleInput()
 		m_IsJumping = false;
 		m_IsFalling = true;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::A))
-	{
-		m_LeftPressed = true;
-	}
-	else
-	{
-		m_LeftPressed = false;
-	}
 
-	if (Keyboard::isKeyPressed(Keyboard::D))
+	///////////////why dont it work
+	if (!isOnIce())
 	{
-		m_RightPressed = true;
-	}
-	else
-	{
-		m_RightPressed = false;
+		if (Keyboard::isKeyPressed(Keyboard::A))
+		{
+			m_LeftPressed = true;
+		}
+		else
+		{
+			m_LeftPressed = false;
+		}
+
+		if (Keyboard::isKeyPressed(Keyboard::D))
+		{
+			m_RightPressed = true;
+		}
+		else
+		{
+			m_RightPressed = false;
+		}
 	}
 
 	return m_JustJumped;

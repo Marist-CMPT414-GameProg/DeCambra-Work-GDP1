@@ -8,7 +8,6 @@ void Engine::loadLevel()
 	for (int i = 0; i < m_LM.getLevelSize().y; ++i)
 	{
 		delete[] m_ArrayLevel[i];
-
 	}
 	delete[] m_ArrayLevel;
 
@@ -22,9 +21,29 @@ void Engine::loadLevel()
 	// How long is this new time limit
 	m_TimeRemaining = m_LM.getTimeLimit();
 
-	// Spawn Thomas and Bob
-	m_Thomas.spawn(m_LM.getStartPosition(), GRAVITY);
-	m_Bob.spawn(m_LM.getStartPosition(), GRAVITY);
+	// Determine characters based on the current level
+	switch (m_LM.getCurrentLevel())
+	{
+	case 1:
+		m_John.spawn(m_LM.getStartPosition(), GRAVITY);
+		m_Bob.spawn(m_LM.getStartPosition(), GRAVITY);		
+		break;
+
+	case 2:
+		m_Thomas.spawn(m_LM.getStartPosition(), GRAVITY);
+		m_Bob.spawn(m_LM.getStartPosition(), GRAVITY);
+		break;
+
+	case 3:
+		m_Thomas.spawn(m_LM.getStartPosition(), GRAVITY);
+		m_John.spawn(m_LM.getStartPosition(), GRAVITY);
+		break;
+
+	case 4:
+		m_Thomas.spawn(m_LM.getStartPosition(), GRAVITY);
+		m_Bob.spawn(m_LM.getStartPosition(), GRAVITY);
+		break;
+	}
 
 	// Make sure this code isn't run again
 	m_NewLevelRequired = false;

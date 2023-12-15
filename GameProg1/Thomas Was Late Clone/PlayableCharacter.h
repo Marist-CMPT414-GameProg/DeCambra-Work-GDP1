@@ -34,6 +34,13 @@ private:
 	// How fast is the character
 	float m_Speed = 400;
 
+	// Last known x-velocity
+	float m_LastDirection;
+
+	float m_ElapsedTime;
+
+	bool m_IsOnIce = false;
+
 	// Where is the player
 	Vector2f m_Position;
 
@@ -54,6 +61,15 @@ public:
 	// This is a pure virtual function
 	bool virtual handleInput() = 0;
 	// This class is now abstract and cannot be instanciated
+
+	// This deals with behavior when touching an ice block
+	void handleIceBlock(bool isTouchingIceBlock);
+
+	// Set whether the character is on ice or not
+	void setOnIce(bool onIce);
+
+	// Check if the character is on ice
+	bool isOnIce() const;
 
 	// Where is the player
 	FloatRect getPosition();

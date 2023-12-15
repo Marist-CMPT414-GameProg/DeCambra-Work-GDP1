@@ -3,6 +3,7 @@
 #include "TextureHolder.h"
 #include "Thomas.h"
 #include "Bob.h"
+#include "John.h"
 #include "LevelManager.h"
 #include "SoundManager.h"
 #include "HUD.h"
@@ -17,11 +18,16 @@ private:
 	TextureHolder th;
 
 	// create a particle system
-	ParticleSystem m_PS;
+	ParticleSystem m_WaterParticles;
+	ParticleSystem m_FireParticles;
+	ParticleSystem m_IceParticles;
+	ParticleSystem m_GoalParticles;
 
-	// Thomas and his friend, Bob
+	// Thomas and his friend, Bob, john
 	Thomas m_Thomas;
 	Bob m_Bob;
+
+	John m_John;
 
 	// A class to manage all the levels
 	LevelManager m_LM;
@@ -99,8 +105,7 @@ private:
 	bool detectCollisions(PlayableCharacter& character);
 
 	// Make a vector of the best places to emit sounds from
-	void populateEmitters(vector <Vector2f>& vSoundEmitters,
-		int** arrayLevel);
+	void populateEmitters(vector <Vector2f>& vSoundEmitters, int** arrayLevel);
 
 	// A vector of Vector2f for the fire emiiter locations
 	vector <Vector2f> m_FireEmitters;
@@ -111,5 +116,4 @@ public:
 
 	// Run will call all the private functions
 	void run();
-
 };

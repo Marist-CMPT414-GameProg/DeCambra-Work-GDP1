@@ -25,15 +25,33 @@ void Engine::draw()
 		m_Window.draw(m_VALevel, &m_TextureTiles);
 
 		// Draw thomas
+		if (m_LM.getCurrentLevel() == 2 || m_LM.getCurrentLevel() == 3 || m_LM.getCurrentLevel() == 4)
 		m_Window.draw(m_Thomas.getSprite());
 
-		// Draw thomas
+		// Draw bob
+		if (m_LM.getCurrentLevel() == 1 || m_LM.getCurrentLevel() == 2 || m_LM.getCurrentLevel() == 4)
 		m_Window.draw(m_Bob.getSprite());
 
-		// Draw the particle system
-		if (m_PS.running())
+		// Draw John
+		if (m_LM.getCurrentLevel() == 1 || m_LM.getCurrentLevel() == 3)
+		m_Window.draw(m_John.getSprite());
+
+		// Draw the particle systems
+		if (m_WaterParticles.running())
 		{
-			m_Window.draw(m_PS);
+			m_Window.draw(m_WaterParticles);
+		}
+		if (m_FireParticles.running())
+		{
+			m_Window.draw(m_FireParticles);
+		}
+		if (m_IceParticles.running())
+		{
+			m_Window.draw(m_IceParticles);
+		}
+		if (m_GoalParticles.running())
+		{
+			m_Window.draw(m_GoalParticles);
 		}
 	}
 	else
@@ -44,8 +62,6 @@ void Engine::draw()
 
 		// Switch to background view
 		m_Window.setView(m_BGLeftView);
-		// Draw the background
-		//m_Window.draw(m_BackgroundSprite);
 
 		// Draw the background, complete with shader effect
 		m_Window.draw(m_BackgroundSprite, &m_RippleShader);
@@ -56,24 +72,40 @@ void Engine::draw()
 		// Draw the Level
 		m_Window.draw(m_VALevel, &m_TextureTiles);
 
-		// Draw thomas
+		// Draw bob
+		if (m_LM.getCurrentLevel() == 1 || m_LM.getCurrentLevel() == 2 || m_LM.getCurrentLevel() == 4)
 		m_Window.draw(m_Bob.getSprite());
 
 		// Draw thomas
+		if (m_LM.getCurrentLevel() == 2 || m_LM.getCurrentLevel() == 3 || m_LM.getCurrentLevel() == 4)
 		m_Window.draw(m_Thomas.getSprite());
 
-		// Draw the particle system
-		if (m_PS.running())
+		// Draw John
+		if (m_LM.getCurrentLevel() == 1 || m_LM.getCurrentLevel() == 3)
+		m_Window.draw(m_John.getSprite());
+
+		// Draw the particle systems
+		if (m_WaterParticles.running())
 		{
-			m_Window.draw(m_PS);
+			m_Window.draw(m_WaterParticles);
+		}
+		if (m_FireParticles.running())
+		{
+			m_Window.draw(m_FireParticles);
+		}
+		if (m_IceParticles.running())
+		{
+			m_Window.draw(m_IceParticles);
+		}
+		if (m_GoalParticles.running())
+		{
+			m_Window.draw(m_GoalParticles);
 		}
 
 		// Now draw Bob's side of the screen
 
 		// Switch to background view
 		m_Window.setView(m_BGRightView);
-		// Draw the background
-		//m_Window.draw(m_BackgroundSprite);
 
 		// Draw the background, complete with shader effect
 		m_Window.draw(m_BackgroundSprite, &m_RippleShader);
@@ -84,18 +116,35 @@ void Engine::draw()
 		// Draw the Level
 		m_Window.draw(m_VALevel, &m_TextureTiles);
 
-		// Draw thomas
-		m_Window.draw(m_Thomas.getSprite());
-
 		// Draw bob
+		if (m_LM.getCurrentLevel() == 1 || m_LM.getCurrentLevel() == 2 ||m_LM.getCurrentLevel() == 4)
 		m_Window.draw(m_Bob.getSprite());
 
-		// Draw the particle system
-		if (m_PS.running())
-		{
-			m_Window.draw(m_PS);
-		}
+		// Draw thomas
+		if (m_LM.getCurrentLevel() == 2 || m_LM.getCurrentLevel() == 3 || m_LM.getCurrentLevel() == 4)
+		m_Window.draw(m_Thomas.getSprite());
 
+		// Draw John
+		if (m_LM.getCurrentLevel() == 1 || m_LM.getCurrentLevel() == 3)
+		m_Window.draw(m_John.getSprite());
+
+		// Draw the particle systems
+		if (m_WaterParticles.running())
+		{
+			m_Window.draw(m_WaterParticles);
+		}
+		if (m_FireParticles.running())
+		{
+			m_Window.draw(m_FireParticles);
+		}
+		if (m_IceParticles.running())
+		{
+			m_Window.draw(m_IceParticles);
+		}
+		if (m_GoalParticles.running())
+		{
+			m_Window.draw(m_GoalParticles);
+		}
 	}
 
 	// Draw the HUD

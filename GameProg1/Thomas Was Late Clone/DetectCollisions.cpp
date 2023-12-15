@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include <iostream>
 
 bool Engine::detectCollisions(PlayableCharacter& character)
 {
@@ -18,7 +19,7 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 	int endX = (int)(detectionZone.left / TILE_SIZE) + 2;
 
 	// Thomas is quite tall so check a few tiles vertically
-	int endY = (int)(detectionZone.top / TILE_SIZE) + 3;
+	int endY = (int)(detectionZone.top / TILE_SIZE) + 4;
 
 	// Make sure we don't test positions lower than zero
 	// Or higher than the end of the array
@@ -55,6 +56,21 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 			block.left = x * TILE_SIZE;
 			block.top = y * TILE_SIZE;
 
+			// Is character colliding with an ice block?
+			if (m_ArrayLevel[y][x] == 5)
+			{
+				if (character.getFeet().intersects(block))
+				{
+					// Set the character on ice
+					character.setOnIce(true);
+
+					character.handleIceBlock(true);
+					character.stopFalling(block.top);					
+
+					std::cout << "Is character on ice? " << (character.isOnIce() ? "Yes" : "No") << std::endl;
+				}
+			}
+
 			// Has character been burnt or drowned?
 			// Use head as this allows him to sink a bit
 			if (m_ArrayLevel[y][x] == 2 || m_ArrayLevel[y][x] == 3)
@@ -87,8 +103,6 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 				{
 					character.stopLeft(block.left);
 				}
-
-
 				if (character.getFeet().intersects(block))
 				{
 					character.stopFalling(block.top);
@@ -97,22 +111,42 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 				{
 					character.stopJump();
 				}
+				std::cout << "Is character on ice? " << (character.isOnIce() ? "Yes" : "No") << std::endl;
 			}
 
-			// More collision detection here once we have learned about particle effects
 			// Has the characters' feet touched fire or water?
 			// If so, start a particle effect
 			// Make sure this is the first time we have detected this
 			// by seeing if an effect is already running			
-			if (!m_PS.running())
+			// Water tile
+			if (m_ArrayLevel[y][x] == 3) 
 			{
-				if (m_ArrayLevel[y][x] == 2 || m_ArrayLevel[y][x] == 3)
+				if (character.getFeet().intersects(block)) 
 				{
-					if (character.getFeet().intersects(block))
-					{
-						// position and start the particle system
-						m_PS.emitParticles(character.getCenter());
-					}
+					m_WaterParticles.emitParticles(character.getCenter());
+				}
+			}
+			// Fire tile
+			else if (m_ArrayLevel[y][x] == 2) 
+			{
+				if (character.getFeet().intersects(block)) 
+				{
+					m_FireParticles.emitParticles(character.getCenter());
+				}
+			}
+			// Ice tile
+			else if (m_ArrayLevel[y][x] == 5) 
+			{
+				if (character.getFeet().intersects(block)) 
+				{
+					m_IceParticles.emitParticles(character.getCenter());
+				}
+			}
+			else if (m_ArrayLevel[y][x] == 4)
+			{
+				if (character.getFeet().intersects(block))
+				{
+					m_GoalParticles.emitParticles(character.getCenter());
 				}
 			}
 
@@ -124,6 +158,9 @@ bool Engine::detectCollisions(PlayableCharacter& character)
 			}
 		}
 	}
+	// Set the character off ice if not on an ice block
+	character.setOnIce(false);
+
 	// All done, return, wheteher or not a new level might be required
 	return reachedGoal;
 }

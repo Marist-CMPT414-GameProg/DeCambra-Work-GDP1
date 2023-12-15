@@ -1,10 +1,9 @@
 #include "Particle.h"
 
-Particle::Particle(Vector2f direction)
+Particle::Particle(Vector2f direction, Color color) : m_Color(color)
 {
 
 	// Determine the direction
-	//m_Velocity = direction;
 	m_Velocity.x = direction.x;
 	m_Velocity.y = direction.y;
 }
@@ -24,4 +23,9 @@ void Particle::setPosition(Vector2f position)
 Vector2f Particle::getPosition()
 {
 	return m_Position;
+}
+
+Color Particle::getColor() 
+{
+	return m_Color;
 }

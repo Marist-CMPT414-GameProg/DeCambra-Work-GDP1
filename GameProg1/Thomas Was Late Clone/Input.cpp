@@ -7,8 +7,6 @@ void Engine::input()
 	{
 		if (event.type == Event::KeyPressed)
 		{
-
-
 			// Handle the player quitting
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
@@ -46,6 +44,13 @@ void Engine::input()
 	if (m_Bob.handleInput())
 	{
 		// Play a jump sound
+		m_SM.playJump();
+	}
+
+	// Handle input specific to john
+	if (m_John.handleInput())
+	{
+		// jump sound
 		m_SM.playJump();
 	}
 }

@@ -13,6 +13,7 @@ private:
 	float m_Duration;
 	bool m_IsRunning = false;
 
+	Color m_ParticleColor;
 
 public:
 
@@ -26,5 +27,6 @@ public:
 
 	bool running();
 
+	void setParticleColor(Color color);
 };
 

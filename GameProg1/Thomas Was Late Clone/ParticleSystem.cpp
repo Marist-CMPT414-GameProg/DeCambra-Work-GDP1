@@ -4,6 +4,11 @@
 using namespace sf;
 using namespace std;
 
+void ParticleSystem::setParticleColor(Color color) 
+{
+	m_ParticleColor = color;
+}
+
 void ParticleSystem::init(int numParticles)
 {
 	m_Vertices.setPrimitiveType(Points);
@@ -19,13 +24,10 @@ void ParticleSystem::init(int numParticles)
 
 		Vector2f direction;
 
-		direction = Vector2f(cos(angle) * speed,
-			sin(angle) * speed);
+		direction = Vector2f(cos(angle) * speed, sin(angle) * speed);
 
-		m_Particles.push_back(Particle(direction));
-
+		m_Particles.push_back(Particle(direction, m_ParticleColor));
 	}
-
 }
 
 void ParticleSystem::update(float dt)
@@ -50,7 +52,6 @@ void ParticleSystem::update(float dt)
 	{
 		m_IsRunning = false;
 	}
-
 }
 
 void ParticleSystem::emitParticles(Vector2f startPosition)
@@ -63,17 +64,15 @@ void ParticleSystem::emitParticles(Vector2f startPosition)
 
 	for (i = m_Particles.begin(); i != m_Particles.end(); i++)
 	{
-		m_Vertices[currentVertex].color = Color::Yellow;
+		m_Vertices[currentVertex].color = m_ParticleColor;
 		(*i).setPosition(startPosition);
 
 		currentVertex++;
 	}
-
 }
 
 void ParticleSystem::draw(RenderTarget& target, RenderStates states) const
 {
-
 	target.draw(m_Vertices, states);
 }
 
